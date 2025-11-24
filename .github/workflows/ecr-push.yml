@@ -2,7 +2,7 @@ name: Build & Push to ECR (dev/prod)
 
 on:
   push:
-    branches: ["dev"]
+    branches: ["dev1"]
 
 jobs:
   build-and-push:
