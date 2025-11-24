@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SmartSpend - 금융 애플리케이션
 
 네이비와 회색 색상을 중심으로 한 현대적이고 전문적인 금융 관리 애플리케이션입니다.
@@ -17,7 +16,6 @@
 2. **전체 소비 분석** - 월별 트렌드, 시간대별 거래량 분석
 3. **분석 요약 리포트** - 핵심 인사이트 및 실행 권장사항
 
-<<<<<<< HEAD
 ## 🗂 프로젝트 구조
 
 ```
@@ -236,11 +234,9 @@ useStats, useCalendar, useMonthlyTrend, useCategoryPieData
 
 최신 Tailwind 4 문제를 해결하기 위해
 Tailwind 3.x로 고정 설치해 안정적 동작 보장
->>>>>>> 2cc005f (Update ECR workflow and README)
 
 index.css는 Tailwind 지시자만 유지:
 
-<<<<<<< HEAD
 **SmartSpend** - 스마트한 소비 관리의 시작
 =======
 @tailwind base;
