@@ -70,14 +70,14 @@ export class ChatbotError extends Error {
 export const getErrorMessage = (error) => {
     if (error instanceof ChatbotError) {
         if (error.statusCode === 0) {
-            return '네트워크 연결을 확인해주세요 😥';
+            return '네트워크 연결을 확인해주세요.';
         }
         if (error.statusCode >= 500) {
-            return '서버에 문제가 생겼어요. 잠시 후 다시 시도해주세요 🔧';
+            return '서버에 문제가 생겼어요. 잠시 후 다시 시도해주세요.';
         }
         if (error.statusCode >= 400) {
-            return '요청에 문제가 있어요. 다시 시도해주세요 🤔';
+            return '요청에 문제가 있어요. 다시 시도해주세요.';
         }
     }
-    return '죄송해요, 잠시 문제가 생겼어요. 다시 말씀해주시겠어요? 😥';
+    return '죄송해요, 잠시 문제가 생겼어요. 다시 말씀해주시겠어요?';
 };

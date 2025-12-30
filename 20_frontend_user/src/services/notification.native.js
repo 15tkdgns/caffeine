@@ -172,7 +172,7 @@ export async function schedulePredictionNotification(prediction) {
 
     await Notifications.scheduleNotificationAsync({
         content: {
-            title: '💡 예정된 지출 알림',
+            title: '예정된 지출 알림',
             body: `${category} 카테고리에서 ${formatCurrency(amount)} 지출이 예상됩니다.`,
             data: {
                 type: 'prediction',

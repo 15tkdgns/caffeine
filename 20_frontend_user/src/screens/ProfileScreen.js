@@ -43,7 +43,7 @@ export default function ProfileScreen({ navigation }) {
 
     const handleExportData = async () => {
         try {
-            const message = `데이터 내보내기\n\n내보내기 날짜: ${new Date().toLocaleDateString()}\n총 거래: 81건\n총 지출: 1,250,000원\n\n✅ 데이터가 준비되었습니다!`;
+            const message = `데이터 내보내기\n\n내보내기 날짜: ${new Date().toLocaleDateString()}\n총 거래: 81건\n총 지출: 1,250,000원\n\n데이터가 준비되었습니다!`;
             alert(message);
         } catch (error) {
             alert('데이터 내보내기 실패');
@@ -92,7 +92,7 @@ export default function ProfileScreen({ navigation }) {
 
             const file = result.assets[0];
             setSyncModalVisible(true);
-            setSyncProgress('📂 파일 읽는 중...');
+            setSyncProgress('파일 읽는 중...');
 
             // 파일 읽기 - 인코딩 자동 감지 (UTF-8 / EUC-KR)
             const response = await fetch(file.uri);
@@ -108,7 +108,7 @@ export default function ProfileScreen({ navigation }) {
                 csvText = decoder.decode(arrayBuffer);
             }
 
-            setSyncProgress('🔄 데이터 분석 중...');
+            setSyncProgress('데이터 분석 중...');
             await new Promise(resolve => setTimeout(resolve, 500));
 
             const transactions = parseCSV(csvText);
@@ -119,18 +119,18 @@ export default function ProfileScreen({ navigation }) {
                 return;
             }
 
-            setSyncProgress(`💾 ${transactions.length}건 저장 중...`);
+            setSyncProgress(`${transactions.length}건 저장 중...`);
             await new Promise(resolve => setTimeout(resolve, 500));
 
             const saveResult = await saveTransactions(transactions);
 
-            setSyncProgress('✅ 동기화 완료!');
+            setSyncProgress('동기화 완료!');
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             setSyncModalVisible(false);
 
             if (saveResult.success) {
-                alert(`✅ 데이터 동기화 완료!\n\n${transactions.length}건의 거래 내역이 업데이트되었습니다.`);
+                alert(`데이터 동기화 완료!\n\n${transactions.length}건의 거래 내역이 업데이트되었습니다.`);
                 // 대시보드로 바로 이동 (스택 초기화)
                 navigation?.reset({
                     index: 0,
@@ -155,7 +155,7 @@ export default function ProfileScreen({ navigation }) {
             await clearTransactions();
             await AsyncStorage.removeItem('transactions_cache');
             await AsyncStorage.removeItem('last_sync_time');
-            alert('✅ 캐시가 삭제되었습니다!');
+            alert('캐시가 삭제되었습니다!');
 
             // 대시보드로 이동 + 완전 새로고침
             navigation?.reset({
@@ -176,7 +176,7 @@ export default function ProfileScreen({ navigation }) {
 
     // 회원탈퇴 핸들러 (백엔드 연동)
     const handleDeleteAccount = async () => {
-        if (!confirm('정말 회원탈퇴를 진행하시겠습니까?\n\n⚠️ 모든 데이터가 영구적으로 삭제됩니다.')) {
+        if (!confirm('정말 회원탈퇴를 진행하시겠습니까?\n\n모든 데이터가 영구적으로 삭제됩니다.')) {
             return;
         }
 

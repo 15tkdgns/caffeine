@@ -10,7 +10,7 @@ export const COLORS = {
     PRIMARY_LIGHT: '#E1BEE7',
     ACCENT: '#E91E63',
     ACCENT_LIGHT: '#FCE4EC',
-    
+
     // Chart Colors (보라색/핑크 계열)
     CHART_MAGENTA: '#E91E63',
     CHART_PURPLE: '#9C27B0',
@@ -44,14 +44,14 @@ export const CATEGORIES = {
 export const CATEGORY_LIST = Object.values(CATEGORIES);
 
 export const CATEGORY_ICONS = {
-    [CATEGORIES.SHOPPING]: '🛍️',
-    [CATEGORIES.FOOD]: '🍔',
-    [CATEGORIES.UTILITIES]: '💡',
-    [CATEGORIES.LEISURE]: '🎮',
-    [CATEGORIES.TRANSPORT]: '🚗',
-    [CATEGORIES.OTHER]: '📦',
-    [CATEGORIES.HEALTHCARE]: '🏥',
-    [CATEGORIES.EDUCATION]: '📚',
+    [CATEGORIES.SHOPPING]: '',
+    [CATEGORIES.FOOD]: '',
+    [CATEGORIES.UTILITIES]: '',
+    [CATEGORIES.LEISURE]: '',
+    [CATEGORIES.TRANSPORT]: '',
+    [CATEGORIES.OTHER]: '',
+    [CATEGORIES.HEALTHCARE]: '',
+    [CATEGORIES.EDUCATION]: '',
 };
 
 // ==================== 카드 타입 상수 ====================
@@ -167,17 +167,17 @@ export const CACHE_DURATION_MS = 5 * 60 * 1000; // 5분
 // 빈 상태 메시지
 export const EMPTY_MESSAGES = {
     NO_TRANSACTIONS: {
-        icon: '💳',
+        icon: '',
         title: '첫 거래를 시작해보세요!',
         description: '아직 등록된 거래가 없습니다.',
     },
     NO_SEARCH_RESULTS: {
-        icon: '🔍',
+        icon: '',
         title: '검색 결과를 찾을 수 없어요',
         description: '다른 검색어로 시도해보세요.',
     },
     NO_ANOMALIES: {
-        icon: '🛡️',
+        icon: '',
         title: '안전해요!',
         description: '의심스러운 거래가 없습니다.',
     },

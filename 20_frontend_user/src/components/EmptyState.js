@@ -5,7 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 
 // 빈 상태 화면을 표시하는 컴포넌트
-export default function EmptyState({ icon = '📊', title, description, actionText, onAction }) {
+export default function EmptyState({ icon = '', title, description, actionText, onAction }) {
     const { colors } = useTheme();
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const scaleAnim = useRef(new Animated.Value(0.9)).current;

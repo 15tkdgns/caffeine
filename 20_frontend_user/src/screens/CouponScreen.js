@@ -115,7 +115,7 @@ export default function CouponScreen({ route }) {
         }
 
         if (selectedCouponId !== null) {
-            alert('⚠️ 쿠폰은 한 번에 1개만 선택 가능합니다!\n\n현재 선택된 쿠폰을 먼저 해제하거나 사용해주세요.');
+            alert('[!] 쿠폰은 한 번에 1개만 선택 가능합니다!\n\n현재 선택된 쿠폰을 먼저 해제하거나 사용해주세요.');
             return;
         }
 
@@ -254,7 +254,7 @@ export default function CouponScreen({ route }) {
                                 <TouchableOpacity
                                     style={styles(colors).useCouponButton}
                                     onPress={() => handleUseCoupon(item)}>
-                                    <Text style={styles(colors).useCouponButtonText}>🎫 사용하기</Text>
+                                    <Text style={styles(colors).useCouponButtonText}>사용하기</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles(colors).deselectButton}
@@ -310,7 +310,7 @@ export default function CouponScreen({ route }) {
 
             {/* Search Bar */}
             <View style={styles(colors).searchContainer}>
-                <Text style={styles(colors).searchIcon}>🔍</Text>
+                <Text style={styles(colors).searchIcon}></Text>
                 <TextInput
                     style={styles(colors).searchInput}
                     placeholder="가맹점 검색..."
@@ -391,7 +391,7 @@ export default function CouponScreen({ route }) {
                 {/* Empty State */}
                 {filteredCoupons.length === 0 && (
                     <EmptyState
-                        icon="🎁"
+                        icon=""
                         title="쿠폰이 없습니다"
                         description="AI가 예측한 쿠폰을 받아보세요!"
                     />

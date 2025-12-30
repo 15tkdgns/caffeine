@@ -45,25 +45,25 @@ const CATEGORY_ICON = {
     '기타': { icon: 'box', color: '#9CA3AF' },
 };
 
-// 이모지 폴백 (아이콘 없을 때)
-const CATEGORY_EMOJI = {
-    '외식': '🍽️',
-    '식비': '🍔',
-    '식료품': '🥗',
-    '카페': '☕',
-    '생활': '🏠',
-    '주유': '⛽',
-    '교통': '🚗',
-    '공과금': '💡',
-    '쇼핑': '🛍️',
-    '마트': '🛒',
-    '편의점': '🏪',
-    '여가': '🎮',
-    '의료': '🏥',
-    '문화': '🎬',
-    '교육': '📚',
-    '통신': '📱',
-    '기타': '📦',
+// 카테고리 라벨 (이모지 제거됨)
+const CATEGORY_LABEL = {
+    '외식': '',
+    '식비': '',
+    '식료품': '',
+    '카페': '',
+    '생활': '',
+    '주유': '',
+    '교통': '',
+    '공과금': '',
+    '쇼핑': '',
+    '마트': '',
+    '편의점': '',
+    '여가': '',
+    '의료': '',
+    '문화': '',
+    '교육': '',
+    '통신': '',
+    '기타': '',
 };
 
 // 대쉬보드 화면
@@ -207,7 +207,7 @@ export default function DashboardScreen({ navigation }) {
                 category,
                 total_amount: amount,
                 percentage: Math.round((amount / total) * 100),
-                emoji: CATEGORY_EMOJI[category] || '📦'
+                emoji: CATEGORY_LABEL[category] || ''
             }));
     };
 
@@ -386,7 +386,7 @@ export default function DashboardScreen({ navigation }) {
     if (!transactions || transactions.length === 0) {
         return (
             <EmptyState
-                icon="📊"
+                icon=""
                 title="연동된 거래내역이 없습니다"
                 description={"프로필에서 데이터를 동기화하여\n소비 분석을 시작하세요"}
                 actionText="동기화 하러 가기"

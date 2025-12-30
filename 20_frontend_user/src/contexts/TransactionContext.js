@@ -193,41 +193,64 @@ export const TransactionProvider = ({ children }) => {
             // 즉시 성공 반환 (모달을 빠르게 닫기 위해)
             const successResult = { success: true, transaction: formattedTx };
 
+            // 이상거래 판정 상수 (카테고리별 컷오프 - 백엔드 기준)
+            const ANOMALY_CUTOFFS = {
+                '식비': 5000000,
+                '쇼핑': 9990000,
+                '공과금': 5000000,
+                '여가': 9990000,
+                '교통': 1000000,
+                '의료': 9990000,
+                '교육': 5000000,
+                '기타': 9990000,
+            };
+            const DEFAULT_CUTOFF = 9990000;
 
-            // AI 평가를 백그라운드에서 비동기 실행 (await 없이)
-            // AI 평가는 항상 활성화됨
-            (async () => {
-                try {
-                    // 소비 내역 요약 계산 (유틸리티 사용)
-                    const monthlyTransactions = filterMonthlyTransactions(updated);
-                    const totalSpent = calculateTotalSpent(monthlyTransactions);
+            // 이상거래 여부 판정
+            const cutoff = ANOMALY_CUTOFFS[formattedTx.category] || DEFAULT_CUTOFF;
+            const isAnomaly = formattedTx.amount >= cutoff;
 
-                    // 같은 카테고리 지출 계산
-                    const categoryBreakdown = analyzeCategoryBreakdown(monthlyTransactions);
-                    const categoryData = categoryBreakdown[formattedTx.category] || { count: 0, total: 0 };
+            if (isAnomaly) {
+                // 이상거래로 판정된 경우: API 호출 없이 즉시 경고 메시지 표시
+                console.log('[이상거래 탐지]', formattedTx.merchant, formattedTx.amount);
+                setTimeout(() => {
+                    showToast(`[이상거래 의심] ${formattedTx.category} 카테고리에서 평소보다 큰 금액(${formattedTx.amount.toLocaleString()}원)이 감지되었습니다.`, 6000);
+                }, 1000);
+            } else {
+                // 정상 거래: AI 평가를 백그라운드에서 비동기 실행
+                (async () => {
+                    try {
+                        // 소비 내역 요약 계산 (유틸리티 사용)
+                        const monthlyTransactions = filterMonthlyTransactions(updated);
+                        const totalSpent = calculateTotalSpent(monthlyTransactions);
 
-                    // LLM API 호출 (리팩토링된 API 사용)
-                    const evaluationResult = await evaluateTransaction({
-                        transaction: {
-                            merchant_name: formattedTx.merchant,
-                            amount: formattedTx.amount,
-                            category: formattedTx.category
+                        // 같은 카테고리 지출 계산
+                        const categoryBreakdown = analyzeCategoryBreakdown(monthlyTransactions);
+                        const categoryData = categoryBreakdown[formattedTx.category] || { count: 0, total: 0 };
+
+                        // LLM API 호출 (리팩토링된 API 사용)
+                        const evaluationResult = await evaluateTransaction({
+                            transaction: {
+                                merchant_name: formattedTx.merchant,
+                                amount: formattedTx.amount,
+                                category: formattedTx.category
+                            }
+                            // naggingLevel은 기본값 '중' 사용
+                        });
+
+                        if (evaluationResult.success && evaluationResult.message) {
+                            console.log('[AI 평가]', evaluationResult.message);
+
+                            // Toast 알림 표시 (모달이 완전히 닫힌 후)
+                            setTimeout(() => {
+                                showToast(evaluationResult.message, 6000);  // 6초 동안 표시
+                            }, 1000);
                         }
-                        // naggingLevel은 기본값 '중' 사용
-                    });
-
-                    if (evaluationResult.success && evaluationResult.message) {
-                        console.log('✅ AI 평가:', evaluationResult.message);
-
-                        // Toast 알림 표시 (모달이 완전히 닫힌 후)
-                        setTimeout(() => {
-                            showToast(evaluationResult.message, 6000);  // 6초 동안 표시
-                        }, 1000);
+                    } catch (evalError) {
+                        console.error('AI 평가 실패:', evalError);
                     }
-                } catch (evalError) {
-                    console.error('AI 평가 실패:', evalError);
-                }
-            })();
+                })();
+            }
 
             return successResult;
         } catch (error) {

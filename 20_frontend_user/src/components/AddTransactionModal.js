@@ -64,18 +64,18 @@ export default function AddTransactionModal({ visible, onClose, onSuccess }) {
             });
 
             if (result.success) {
-                console.log('✅ 거래 추가 성공:', result.transaction);
+                console.log('[거래 추가 성공]', result.transaction);
                 resetForm();
                 onClose();
                 if (onSuccess) onSuccess();
                 if (!result.aiEvaluation) {
-                    alert('✅ 소비 내역이 추가되었습니다!');
+                    alert('소비 내역이 추가되었습니다!');
                 }
             } else {
                 throw new Error(result.error?.message || '저장 실패');
             }
         } catch (error) {
-            console.error('❌ 거래 추가 실패:', error);
+            console.error('[거래 추가 실패]', error);
             alert(`저장에 실패했습니다: ${error.message}`);
         } finally {
             setIsLoading(false);
@@ -126,7 +126,7 @@ export default function AddTransactionModal({ visible, onClose, onSuccess }) {
                         end={{ x: 1, y: 1 }}
                         style={styles.header}
                     >
-                        <Text style={styles.headerTitle}>💳 소비 추가</Text>
+                        <Text style={styles.headerTitle}>소비 추가</Text>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                             <Feather name="x" size={24} color="white" />
                         </TouchableOpacity>

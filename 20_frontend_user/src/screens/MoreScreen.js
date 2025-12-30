@@ -243,7 +243,7 @@ export default function MoreScreen({ navigation, route }) {
                     {isTyping && (
                         <View style={[styles.messageBubble, styles.botBubble, { backgroundColor: colors.cardBackground }]}>
                             <Text style={[styles.messageText, { color: colors.textSecondary, fontStyle: 'italic' }]}>
-                                AI가 생각 중... 💬
+                                AI가 생각 중...
                             </Text>
                         </View>
                     )}
@@ -305,7 +305,7 @@ export default function MoreScreen({ navigation, route }) {
                                 <Feather name="message-circle" size={32} color="#FFFFFF" />
                             </View>
                             <View style={styles.chatTextContainer}>
-                                <Text style={styles.chatButtonTitle}>🤖 잠깐만 AI</Text>
+                                <Text style={styles.chatButtonTitle}>잠깐만 AI</Text>
                                 <Text style={styles.chatButtonDesc}>AI와 소비 습관에 대해 상담해보세요</Text>
                             </View>
                             <Feather name="chevron-right" size={24} color="#FFFFFF" />
@@ -353,7 +353,7 @@ export default function MoreScreen({ navigation, route }) {
                     {budgetAlertEnabled && (
                         <View style={[styles.budgetInlineSection, { backgroundColor: colors.cardBackground }]}>
                             <View style={styles.budgetInlineRow}>
-                                <Text style={[styles.budgetInlineLabel, { color: colors.text }]}>💰 월 목표 예산</Text>
+                                <Text style={[styles.budgetInlineLabel, { color: colors.text }]}>월 목표 예산</Text>
                             </View>
                             <View style={[styles.budgetInlineInputContainer, { backgroundColor: colors.background }]}>
                                 <TextInput
@@ -471,7 +471,7 @@ export default function MoreScreen({ navigation, route }) {
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalContent, { backgroundColor: colors.cardBackground, maxHeight: '85%' }]}>
                         <View style={styles.modalHandle} />
-                        <Text style={[styles.modalTitle, { color: colors.text }]}>❓ 자주 묻는 질문</Text>
+                        <Text style={[styles.modalTitle, { color: colors.text }]}>자주 묻는 질문</Text>
 
                         <ScrollView style={styles.qnaList} showsVerticalScrollIndicator={false}>
                             {qnaData.map((item) => (

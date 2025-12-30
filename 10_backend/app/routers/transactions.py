@@ -291,6 +291,7 @@ async def create_transaction(
     - description: 설명/메모 (선택)
     - transaction_date: 거래 시각 ISO format (선택, 기본값: 현재 시각)
     """
+    logger.info(f"create_transaction received: {data.dict()}")
     try:
         # merchant_name과 merchant 둘 다 지원 (일괄 생성 호환)
         merchant = data.merchant_name or data.merchant

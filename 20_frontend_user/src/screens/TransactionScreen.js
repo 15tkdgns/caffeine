@@ -38,11 +38,18 @@ export default function TransactionScreen({ navigation, route }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [prediction, setPrediction] = useState(null);
     const [couponNotification, setCouponNotification] = useState(null); // 쿠폰 발급 알림
+    const [isPredicting, setIsPredicting] = useState(false); // 예측 로딩 상태
 
     // Anomaly Mode State
     const [anomalyMode, setAnomalyMode] = useState(false);
     const [anomalyLoading, setAnomalyLoading] = useState(false);
     const [anomalyTransactions, setAnomalyTransactions] = useState([]);
+
+    // 거래 목록이 변경되면 예측 결과 리셋 (새 거래 기반으로 다시 예측 필요)
+    useEffect(() => {
+        setPrediction(null);
+        setCouponNotification(null);
+    }, [transactions.length]);
 
     useEffect(() => {
         if (route.params?.filter === 'anomaly' || route.params?.filter === 'suspicious') {
@@ -116,7 +123,9 @@ export default function TransactionScreen({ navigation, route }) {
         '기타': { merchant: '올리브영', discount: 2000, description: '뷰티 할인 쿠폰' },
     };
 
-    const fetchPrediction = async () => {
+    const fetchPrediction = useCallback(async () => {
+        console.log('=== fetchPrediction 호출됨 ===');
+        console.log('transactions 개수:', transactions?.length);
         try {
             if (!transactions || transactions.length < 5) {
                 Alert.alert('데이터 부족', '예측을 위해 최소 5건 이상의 거래 데이터가 필요합니다.');
@@ -130,7 +139,11 @@ export default function TransactionScreen({ navigation, route }) {
             const csvRows = transactions.map(t => {
                 const datetime = (t.date || '').split(' ');
                 const date = datetime[0] || new Date().toISOString().split('T')[0];
-                const time = datetime[1] || '12:00';
+                // 시간 형식 보정: HH:MM -> HH:MM:SS (백엔드 요구사항)
+                let time = datetime[1] || '12:00:00';
+                if (time && time.split(':').length === 2) {
+                    time = time + ':00';  // 초가 없으면 추가
+                }
                 return [
                     date,
                     time,
@@ -194,7 +207,7 @@ export default function TransactionScreen({ navigation, route }) {
         } finally {
             setIsPredicting(false); // 로딩 종료
         }
-    };
+    }, [transactions]); // transactions가 변경될 때마다 함수 업데이트
 
     const filteredTransactions = (anomalyMode ? anomalyTransactions : transactions).filter(t => {
         if (!searchQuery) return true;
@@ -256,9 +269,9 @@ export default function TransactionScreen({ navigation, route }) {
         setAnomalyCategoryModalVisible(false);
 
         const messages = {
-            safe: '✅ 안전한 거래로 표시되었습니다.',
-            suspicious: '🟡 의심 거래로 표시되었습니다.\n이상탐지 탭에서 확인할 수 있습니다.',
-            dangerous: '🔴 위험 거래로 표시되었습니다.\n고객센터로 자동 신고되었습니다.'
+            safe: '안전한 거래로 표시되었습니다.',
+            suspicious: '의심 거래로 표시되었습니다.\n이상탐지 탭에서 확인할 수 있습니다.',
+            dangerous: '위험 거래로 표시되었습니다.\n고객센터로 자동 신고되었습니다.'
         };
 
         setTimeout(() => {
@@ -328,7 +341,7 @@ export default function TransactionScreen({ navigation, route }) {
             <View style={s.transactionHeader}>
                 <View style={s.merchantInfo}>
                     <Text style={[s.merchant, { color: colors.text }]}>{item.merchant}</Text>
-                    {item.isAnomaly && <Text style={{ fontSize: 10, color: '#EF4444', fontWeight: 'bold', marginLeft: 4 }}>⚠️ 이상거래</Text>}
+                    {item.isAnomaly && <Text style={{ fontSize: 10, color: '#EF4444', fontWeight: 'bold', marginLeft: 4 }}>[!] 이상거래</Text>}
                     <Text style={s.cardTypeBadge(item.cardType)}>{item.cardType || '카드'}</Text>
                 </View>
                 <Text style={s.amount}>{formatCurrency(item.amount)}</Text>
@@ -393,7 +406,7 @@ export default function TransactionScreen({ navigation, route }) {
                     {transactions.length > 0 && (
                         <View style={styles(colors).predictionCard}>
                             <View style={styles(colors).predictionHeader}>
-                                <Text style={styles(colors).predictionIcon}>🤖</Text>
+                                <Text style={styles(colors).predictionIcon}></Text>
                                 <Text style={styles(colors).predictionTitle}>AI 다음 소비 예측</Text>
                             </View>
 
@@ -412,12 +425,17 @@ export default function TransactionScreen({ navigation, route }) {
                             )}
 
                             <TouchableOpacity
-                                style={styles(colors).predictionButton}
+                                style={[styles(colors).predictionButton, isPredicting && styles(colors).predictionButtonDisabled]}
                                 onPress={fetchPrediction}
+                                disabled={isPredicting}
                             >
-                                <Text style={styles(colors).predictionButtonText}>
-                                    {prediction !== null ? '다시 예측하기' : '다음 소비 예측하기'}
-                                </Text>
+                                {isPredicting ? (
+                                    <ActivityIndicator size="small" color="#FFFFFF" />
+                                ) : (
+                                    <Text style={styles(colors).predictionButtonText}>
+                                        {prediction !== null ? '다시 예측하기' : '다음 소비 예측하기'}
+                                    </Text>
+                                )}
                             </TouchableOpacity>
                         </View>
                     )}
@@ -428,7 +446,7 @@ export default function TransactionScreen({ navigation, route }) {
                             <TouchableOpacity onPress={() => setCouponNotification(null)} style={styles(colors).couponBannerCloseTop}>
                                 <Text style={{ fontSize: 20, color: '#1E40AF' }}>✕</Text>
                             </TouchableOpacity>
-                            <Text style={styles(colors).couponBannerTitleTop}>🎉 추천 쿠폰 도착!</Text>
+                            <Text style={styles(colors).couponBannerTitleTop}>추천 쿠폰 도착!</Text>
                             <View style={styles(colors).couponBannerCouponTop}>
                                 <Text style={styles(colors).couponBannerMerchant}>{couponNotification.couponInfo.merchant}</Text>
                                 <Text style={styles(colors).couponBannerDiscount}>{couponNotification.couponInfo.discount.toLocaleString()}원 할인</Text>

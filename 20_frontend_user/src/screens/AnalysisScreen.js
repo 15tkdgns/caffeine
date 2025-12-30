@@ -147,14 +147,14 @@ export default function AnalysisScreen({ navigation }) {
     // 차트 데이터 생성 (대시보드와 동일한 방식)
     const lineChartData = useMemo(() => {
         if (!monthlyData || monthlyData.length === 0) return null;
-        
+
         let chartData = [...monthlyData];
         if (chartData.length === 1) {
             const currentMonth = parseInt(chartData[0].month.replace('월', ''));
             const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
             chartData = [{ month: `${prevMonth}월`, amount: 0 }, ...chartData];
         }
-        
+
         return {
             labels: chartData.map(d => d.month),
             datasets: [{
@@ -250,7 +250,7 @@ export default function AnalysisScreen({ navigation }) {
 
                 {/* Tips */}
                 <FadeInView style={styles.section} delay={150}>
-                    <Text style={[styles.sectionTitle, { color: colors.text }]}>💡 지출 팁</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>지출 팁</Text>
                     <View style={[styles.tipCard, { backgroundColor: colors.cardBackground }]}>
                         <Text style={[styles.tipText, { color: colors.text }]}>
                             {categoryData[0]?.name && `${categoryData[0].name} 지출이 가장 많아요. 비용 절감을 고려해보세요!`}
